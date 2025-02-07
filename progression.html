@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Progression</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #4CAF50;
+            transition: width 0.3s ease-in-out;
+        }
+        .timer-display {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .btn-green {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-red {
+            background: #FF5252;
+            color: white;
+        }
+        .btn-blue {
+            background: #2196F3;
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        .boss-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: none; /* Hidden by default */
+        }
+        .boss-card.active {
+            display: block; /* Show when active */
+        }
+        .boss-hp {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .boss-hp-fill {
+            height: 100%;
+            width: 100%;
+            background: #FF5252;
+            transition: width 0.3s ease-in-out;
+        }
+        .boss-image {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Study Progression</h1>
+        <p>Track your study sessions and level up your productivity!</p>
+    </header>
+
+    <div class="container">
+        <!-- Study Timer -->
+        <div class="card">
+            <h2>Study Timer</h2>
+            <div class="timer-display" id="timerDisplay">00:00:00</div>
+            <div class="flex space-x-4">
+                <button class="btn btn-green" onclick="startTimer()" id="startButton"><i class="fas fa-play"></i> Start</button>
+                <button class="btn btn-red" onclick="stopTimer()" id="stopButton"><i class="fas fa-stop"></i> Stop</button>
+                <button class="btn btn-blue" onclick="resetTimer()"><i class="fas fa-sync"></i> Reset</button>
+            </div>
+        </div>
+
+        <!-- XP Bar & Levels -->
+        <div class="card">
+            <h2>XP Bar & Levels</h2>
+            <p>Level: <span id="level">1</span></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="xpBar"></div>
+            </div>
+            <p>XP: <span id="currentXP">0</span> / <span id="requiredXP">100</span></p>
+        </div>
+
+        <!-- Boss Card -->
+        <div class="boss-card" id="bossCard">
+            <h2>Boss Battle: <span id="bossName">🐌 Snail</span></h2>
+            <div class="boss-image" id="bossImage">🐌</div>
+            <div class="boss-hp">
+                <div class="boss-hp-fill" id="bossHPBar"></div>
+            </div>
+            <p>HP: <span id="bossHP">50</span> / <span id="bossMaxHP">50</span></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Stay focused and keep leveling up your study game!</p>
+    </footer>
+
+    <script>
+        // Study Timer
+        let timerInterval;
+        let seconds = 0, minutes = 0, hours = 0;
+
+        function startTimer() {
+            if (!timerInterval) {
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            seconds = minutes = hours = 0;
+            document.getElementById('timerDisplay').textContent = '00:00:00';
+        }
+
+        function updateTimer() {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+            const formattedTime = 
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0');
+            document.getElementById('timerDisplay').textContent = formattedTime;
+            updateXPAndBoss(); // Update both XP and boss HP
+        }
+
+        // XP Bar & Levels
+        let currentXP = 0;
+        let requiredXP = 100;
+        let level = 1;
+
+        function updateXP() {
+            currentXP += 1; // Gain 1 XP per second
+            if (currentXP >= requiredXP) {
+                levelUp();
+            }
+            updateXPDisplay();
+        }
+
+        function levelUp() {
+            currentXP = 0;
+            level++;
+            requiredXP = Math.ceil(requiredXP * 1.5); // Increase required XP exponentially
+            alert(`Congratulations! You've reached Level ${level}!`);
+            spawnBossIfNecessary();
+        }
+
+        function updateXPDisplay() {
+            const xpBar = document.getElementById('xpBar');
+            const xpPercentage = (currentXP / requiredXP) * 100;
+            xpBar.style.width = xpPercentage + '%';
+
+            document.getElementById('level').textContent = level;
+            document.getElementById('currentXP').textContent = currentXP;
+            document.getElementById('requiredXP').textContent = requiredXP;
+        }
+
+        // Boss System
+        const bosses = [
+            { name: "Snail", hp: 50, image: "🐌" }, // Snail Boss (Level 0 to Level 5)
+            { name: "Turtle", hp: 100, image: "🐢" },
+            { name: "Snake", hp: 150, image: "🐍" },
+            { name: "Wolf", hp: 200, image: "🐺" },
+            { name: "Bear", hp: 250, image: "🐻" },
+            { name: "Dragon", hp: 300, image: "🐉" },
+            { name: "Phoenix", hp: 350, image: "🦅" },
+            { name: "Kraken", hp: 400, image: "🦑" },
+            { name: "Golem", hp: 450, image: "🗿" },
+            { name: "Hydra", hp: 500, image: "🦖" },
+            { name: "Titan", hp: 550, image: "巨人" } // Replace with a custom emoji or GIF
+        ];
+        let currentBossIndex = 0; // Start with the Snail Boss
+        let currentBossHP = bosses[currentBossIndex].hp;
+
+        function spawnBossIfNecessary() {
+            if (level % 5 === 0 && currentBossIndex < bosses.length - 1) {
+                currentBossIndex++;
+                const boss = bosses[currentBossIndex];
+                currentBossHP = boss.hp;
+                document.getElementById('bossName').textContent = `${boss.image} ${boss.name}`;
+                document.getElementById('bossImage').textContent = boss.image;
+                document.getElementById('bossMaxHP').textContent = boss.hp;
+                document.getElementById('bossHP').textContent = boss.hp;
+                document.getElementById('bossHPBar').style.width = '100%';
+            }
+        }
+
+        function updateBossHP() {
+            if (currentBossHP > 0) {
+                currentBossHP -= 1; // Reduce boss HP gradually
+                const bossHPBar = document.getElementById('bossHPBar');
+                const hpPercentage = (currentBossHP / bosses[currentBossIndex].hp) * 100;
+                bossHPBar.style.width = hpPercentage + '%';
+                document.getElementById('bossHP').textContent = currentBossHP;
+
+                if (currentBossHP <= 0) {
+                    alert(`You defeated the ${bosses[currentBossIndex].name}!`);
+                    if (currentBossIndex < bosses.length - 1) {
+                        spawnBossIfNecessary();
+                    } else {
+                        alert("Congratulations! You've defeated all the bosses!");
+                    }
+                }
+            }
+        }
+
+        // Combine XP and Boss Updates
+        function updateXPAndBoss() {
+            updateXP();
+            updateBossHP();
+        }
+
+        // Initialize the Snail Boss at Level 0
+        document.getElementById('bossCard').classList.add('active');
+        const initialBoss = bosses[currentBossIndex];
+        document.getElementById('bossName').textContent = `${initialBoss.image} ${initialBoss.name}`;
+        document.getElementById('bossImage').textContent = initialBoss.image;
+        document.getElementById('bossMaxHP').textContent = initialBoss.hp;
+        document.getElementById('bossHP').textContent = initialBoss.hp;
+    </script>
+</body>
+</html>

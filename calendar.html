@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Calendar</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #4CAF50;
+            transition: width 0.3s ease-in-out;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .calendar-grid div {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .calendar-grid div:hover {
+            transform: scale(1.05);
+        }
+        .calendar-grid div.checked {
+            background: #FF5722;
+            color: white;
+        }
+        .calendar-grid div.checked::after {
+            content: "🔥";
+            display: block;
+            font-size: 1.5rem;
+            margin-top: 5px;
+        }
+        .important-dates {
+            margin-top: 20px;
+        }
+        .important-dates textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            resize: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+        .important-dates textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        .social-icons a:hover {
+            transform: scale(1.2);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 Study Calendar</h1>
+        <p>Track your daily progress and ignite your productivity!</p>
+    </header>
+
+    <div class="container">
+        <!-- Progress Bar -->
+        <div class="card">
+            <h2>Monthly Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <p><span id="progressPercentage">0%</span> Completed</p>
+        </div>
+
+        <!-- Calendar -->
+        <div class="card">
+            <h2>Calendar</h2>
+            <div class="calendar-grid">
+                <!-- Month Label -->
+                <div style="grid-column: span 7; font-size: 1.2rem; font-weight: bold;">
+                    <input type="text" id="monthInput" placeholder="Enter Month" style="background: transparent; border: none; color: white; text-align: center; font-size: 1.2rem;" />
+                </div>
+                <!-- Days of the Month -->
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+                <div>11</div>
+                <div>12</div>
+                <div>13</div>
+                <div>14</div>
+                <div>15</div>
+                <div>16</div>
+                <div>17</div>
+                <div>18</div>
+                <div>19</div>
+                <div>20</div>
+                <div>21</div>
+                <div>22</div>
+                <div>23</div>
+                <div>24</div>
+                <div>25</div>
+                <div>26</div>
+                <div>27</div>
+                <div>28</div>
+                <div>29</div>
+                <div>30</div>
+                <div>31</div>
+            </div>
+        </div>
+
+        <!-- Important Dates Text Box -->
+        <div class="card important-dates">
+            <textarea placeholder="Write important dates here"></textarea>
+        </div>
+    </div>
+
+    <!-- Social Media Share Icons -->
+    <div class="social-icons">
+        <a href="https://www.instagram.com" target="_blank" title="Share on Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://twitter.com/intent/tweet?url=YOUR_URL&text=Check%20out%20this%20awesome%20study%20calendar!" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=YOUR_URL" target="_blank" title="Share on Facebook"><i class="fab fa-facebook"></i></a>
+    </div>
+
+    <footer>
+        <p>Stay consistent and keep igniting your study streaks!</p>
+    </footer>
+
+    <script>
+        // Progress Bar Logic
+        let completedDays = 0;
+        const totalDays = 31;
+
+        function updateProgressBar() {
+            const progressPercentage = (completedDays / totalDays) * 100;
+            document.getElementById('progressBar').style.width = progressPercentage + '%';
+            document.getElementById('progressPercentage').textContent = progressPercentage.toFixed(2) + '%';
+        }
+
+        // Calendar Logic
+        const calendarDays = document.querySelectorAll('.calendar-grid div:not(:first-child)');
+        calendarDays.forEach(day => {
+            day.addEventListener('click', () => {
+                if (!day.classList.contains('checked')) {
+                    day.classList.add('checked');
+                    completedDays++;
+                    updateProgressBar();
+                } else {
+                    day.classList.remove('checked');
+                    completedDays--;
+                    updateProgressBar();
+                }
+            });
+        });
+
+        // Initialize Month Input
+        const monthInput = document.getElementById('monthInput');
+        monthInput.addEventListener('input', () => {
+            const monthName = monthInput.value || 'Month';
+            monthInput.placeholder = monthName;
+        });
+    </script>
+</body>
+</html>

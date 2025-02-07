@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Game</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .flashcard {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            position: relative;
+            perspective: 1000px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flashcard-front {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .flashcard-back {
+            background: rgba(0, 0, 0, 0.5);
+            transform: rotateY(180deg);
+        }
+        .navigation-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 20px;
+        }
+        .navigation-buttons button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .navigation-buttons button:hover {
+            transform: scale(1.05);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Flashcard Game</h1>
+        <p>Click on the card to flip it and reveal the answer!</p>
+    </header>
+
+    <div class="container">
+        <!-- Flashcard Section -->
+        <div class="card">
+            <h2>Your Flashcards</h2>
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front" id="flashcardFront">Loading...</div>
+                    <div class="flashcard-back" id="flashcardBack">Loading...</div>
+                </div>
+            </div>
+            <div class="navigation-buttons">
+                <button class="btn" onclick="prevCard()"><i class="fas fa-arrow-left"></i> Back</button>
+                <button class="btn" onclick="nextCard()">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Stay sharp and keep learning!</p>
+    </footer>
+
+    <script>
+        let pairs = [];
+        let currentCardIndex = 0;
+
+        // Fetch all pairs and initialize the first card
+        async function fetchPairs() {
+            const response = await fetch('http://localhost:3000/api/pairs');
+            pairs = await response.json();
+            renderCurrentCard();
+        }
+
+        // Render the current card
+        function renderCurrentCard() {
+            if (pairs.length === 0) {
+                document.getElementById('flashcardFront').textContent = "No cards available.";
+                document.getElementById('flashcardBack').textContent = "";
+                return;
+            }
+
+            const currentPair = pairs[currentCardIndex];
+            document.getElementById('flashcardFront').textContent = currentPair.question;
+            document.getElementById('flashcardBack').textContent = currentPair.answer;
+        }
+
+        // Flip the flashcard
+        const flashcard = document.getElementById('flashcard');
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('flipped');
+        });
+
+        // Navigate to the next card
+        function nextCard() {
+            if (pairs.length === 0) return;
+            currentCardIndex = (currentCardIndex + 1) % pairs.length;
+            renderCurrentCard();
+            flashcard.classList.remove('flipped'); // Reset flip state
+        }
+
+        // Navigate to the previous card
+        function prevCard() {
+            if (pairs.length === 0) return;
+            currentCardIndex = (currentCardIndex - 1 + pairs.length) % pairs.length;
+            renderCurrentCard();
+            flashcard.classList.remove('flipped'); // Reset flip state
+        }
+
+        // Call fetchPairs when the page loads
+        window.onload = fetchPairs;
+    </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Zone - Homepage</title>
+    <!-- Google Fonts for Fancy Title -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: black;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: #4CAF50;
+            margin: 0;
+        }
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .clock {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+            font-size: 1rem;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .btn i {
+            font-size: 1.2rem;
+        }
+        .btn-pink {
+            background-color: #FF69B4; /* Pink */
+        }
+        .btn-green {
+            background-color: #4CAF50; /* Green */
+        }
+        .btn-orange {
+            background-color: #FFA500; /* Orange */
+        }
+        .btn-blue {
+            background-color: #0074D9; /* Blue */
+        }
+		        .btn-cyan {
+            background-color: #00FFFF; /* Cyan */
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/747/747086.png" alt="Logo">
+            <h1>Study Zone</h1>
+        </div>
+        <div class="clock" id="liveClock"></div>
+    </header>
+
+    <div class="container">
+        <div class="button-container">
+            <!-- Calendar Button -->
+            <a href="calendar.html" class="btn btn-pink">
+                <i class="fas fa-calendar-alt"></i> Calendar
+            </a>
+            <!-- Progression Button -->
+            <a href="progression.html" class="btn btn-green">
+                <i class="fas fa-chart-line"></i> Progression
+            </a>
+            <!-- Weighted Calculator Button -->
+            <a href="calculator.html" class="btn btn-orange">
+                <i class="fas fa-calculator"></i> Weighted Calculator
+            </a>
+			<!-- Wam Calculator Button -->
+			<a href="wam.html" class="btn btn-cyan">
+            <i class="fas fa-calculator"></i> Wam calculator
+            </a>
+            <!-- Notes Button -->
+            <a href="notes.html" class="btn btn-blue">
+                <i class="fas fa-sticky-note"></i> Notes
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Study Zone. All rights reserved by JY.</p>
+    </footer>
+
+    <script>
+        // Function to update the live clock
+        function updateClock() {
+            const clockElement = document.getElementById('liveClock');
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Update the clock every second
+        setInterval(updateClock, 1000);
+
+        // Initial call to display the clock immediately
+        updateClock();
+    </script>
+</body>
+</html>

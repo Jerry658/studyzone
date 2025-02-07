@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weighted Average Calculator</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f9fafb;
+    }
+    .input-group {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      transition: border-color 0.3s ease;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    .btn-green {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .btn-gray {
+      background-color: #e5e7eb;
+      color: black;
+    }
+    .btn-blue {
+      background-color: #0074D9;
+      color: white;
+    }
+    .result-box {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #ffffff;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="p-8">
+  <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-semibold text-center text-green-600 mb-6">Weighted Average Calculator</h1>
+
+    <form id="calculatorForm">
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="font-semibold text-gray-700">Data Value</div>
+        <div class="font-semibold text-gray-700">Weight (%)</div>
+      </div>
+
+      <div id="inputRows" class="space-y-4 mb-6">
+        <!-- Initial rows for Data Value and Weight -->
+        <div class="input-group">
+          <input type="number" name="dataValue" placeholder="Enter value" class="w-full" />
+          <input type="number" name="weight" placeholder="Enter weight" class="w-full" />
+        </div>
+        <div class="input-group">
+          <input type="number" name="dataValue" placeholder="Enter value" class="w-full" />
+          <input type="number" name="weight" placeholder="Enter weight" class="w-full" />
+        </div>
+        <div class="input-group">
+          <input type="number" name="dataValue" placeholder="Enter value" class="w-full" />
+          <input type="number" name="weight" placeholder="Enter weight" class="w-full" />
+        </div>
+      </div>
+
+      <div class="flex justify-between space-x-4 mb-6">
+        <button type="button" onclick="calculateWeightedAverage()" class="btn btn-green">
+          <i class="fas fa-calculator"></i> Calculate
+        </button>
+        <button type="reset" class="btn btn-gray">
+          <i class="fas fa-times"></i> Reset
+        </button>
+        <button type="button" onclick="addRow()" class="btn btn-blue">
+          <i class="fas fa-plus"></i> Add Row
+        </button>
+      </div>
+
+      <div class="result-box" id="weightedAverageResult">
+        Weighted Average: <span id="weightedAverage">0.00</span>
+      </div>
+    </form>
+  </div>
+  <div class="flex justify-center mt-8 space-x-4">
+    <a href="index.html" class="btn btn-green">
+      <i class="button"></i> Homepage
+    </a>
+    <a href="calculator2.html" class="btn btn-blue">
+      <i class="button"></i> Units
+    </a>
+  </div>
+
+  <script>
+    // Function to calculate the weighted average
+    function calculateWeightedAverage() {
+      const dataValues = document.querySelectorAll('input[name="dataValue"]');
+      const weights = document.querySelectorAll('input[name="weight"]');
+      let sumProduct = 0;
+      let sumWeight = 0;
+
+      dataValues.forEach((dataValue, index) => {
+        const value = parseFloat(dataValue.value) || 0;
+        const weight = parseFloat(weights[index].value) || 0;
+        sumProduct += value * (weight / 100);
+        sumWeight += weight / 100;
+      });
+
+      const weightedAverage = sumWeight ? sumProduct / sumWeight : 0;
+      document.getElementById('weightedAverage').textContent = weightedAverage.toFixed(2);
+    }
+
+    // Function to add a new row of inputs
+    function addRow() {
+      const inputRows = document.getElementById('inputRows');
+      const newRow = document.createElement('div');
+      newRow.className = 'input-group';
+      newRow.innerHTML = `
+        <input type="number" name="dataValue" placeholder="Enter value" class="w-full" />
+        <input type="number" name="weight" placeholder="Enter weight" class="w-full" />
+      `;
+      inputRows.appendChild(newRow);
+    }
+  </script>
+</body>
+</html>
